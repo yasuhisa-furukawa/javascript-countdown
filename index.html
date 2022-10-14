@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5-01_countdown</title>
+<link href="../../_common/images/favicon.ico" rel="shortcut icon">
+<link href="https://fonts.googleapis.com/css?family=M+PLUS+1p:400,500" rel="stylesheet">
+<link href="../../_common/css/style.css" rel="stylesheet">
+</head>
+<body>
+<header>
+<div class="container">
+<h1>カウントダウンタイマー</h1>
+<h2>残り時間を計算するファンクションを作る</h2>
+</div><!-- /.container -->
+</header>
+<main>
+<div class="container">
+<section>
+    <p>いまから<span id="timer"></span>以内に注文すると50%オフ！</p>
+</section>
+</div><!-- /.container -->
+</main>
+<footer>
+<div class="container">
+<p>JavaScript Samples</p>
+</div><!-- /.container -->
+</footer>
+<script>
+'use strict';
+
+function countdown(due) { // 46行目でゴール時間が設定されたDateオブジェクトを受け取り、パラメータ（引数）dueに代入
+    const now = new Date(); //33行目に次いでもうひとつのDateオブジェクトを初期化し、定数nowに代入。
+
+    const rest = due.getTime() - now.getTime(); // パラメータdueのミリ秒から、定数nowのミリ秒を引いて、定数restに代入。以下、求めた定数restのミリ秒の数値をもとに、秒、分、時、日を計算する。
+    const sec = Math.floor(rest / 1000) % 60; // 秒の計算。定数rest（ミリ秒）を1000で割って秒にする。さらに60で割って余りを出せば「秒」が出る。
+    const min = Math.floor(rest / 1000 / 60) % 60; // 分の計算。
+    const hours = Math.floor(rest / 1000 / 60 / 60) % 24; // 時の計算
+    const days = Math.floor(rest / 1000 / 60 / 60 / 24); // 日の計算
+    const count = [days, hours, min, sec]; // これらを配列にして定数countに代入
+
+    return count;
+}
+
+let goal = new Date(); //変数goalに現在日時で初期化したDateオブジェクトを代入する。
+// 代入したDateオブジェクトの中で、現在年月日以外の、「時間」と「分」と「秒」だけ以下のように23時59分59秒を設定する。
+// これにより、記録される基準日（ゴール時間）は「現在年　現在月　現在日　23時　59分　59秒」となる。
+goal.setHours(23);
+goal.setMinutes(59);
+goal.setSeconds(59);
+
+console.log(countdown(goal));
+const counter = countdown(goal); // countdownファンクション（33行目）が計算した残り時間の配列（41行目）を、定数counterに代入する。
+const time = `${counter[1]}時間${counter[2]}分${counter[3]}秒`; // 定数conterに代入されたデータ（配列）をもとに、テンプレート文字列で「〇時間△分□秒」というテキストを作成し、それを定数timeに代入する。配列の0番（日付）は使用しない。
+document.getElementById('timer').textContent = time; // 定数timeを、テキストコンテンツとしてHTMLの<span id="timer"></span>に出力する。
+</script>
+</body>
+</html>
